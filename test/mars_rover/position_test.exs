@@ -21,4 +21,37 @@ defmodule MarsRover.PositionTest do
 
     assert msg === :invalid_position
   end
+
+  test "update position" do
+    {:ok, position} = Position.create(1, 2)
+
+    {:ok, new_position} =
+      position
+      |> Position.update(1, 1)
+
+    assert new_position.row === 2
+    assert new_position.col === 3
+  end
+
+  test "update position with row is out of bound" do
+    {:ok, position} = Position.create(5, 1)
+
+    {:ok, new_position} =
+      position
+      |> Position.update(2, 0)
+
+    assert new_position.row === 6
+    assert new_position.col === 1
+  end
+
+  test "update position with col is out of bound" do
+    {:ok, position} = Position.create(1, 5)
+
+    {:ok, new_position} =
+      position
+      |> Position.update(0, 2)
+
+    assert new_position.row === 1
+    assert new_position.col === 6
+  end
 end
