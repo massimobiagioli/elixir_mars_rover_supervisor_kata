@@ -55,23 +55,21 @@ defmodule MarsRover.MarsRover do
     mars_rover
   end
 
-  def move_forward(%MarsRover{name: name, position: position, orientation: orientation}) do
-    row_offset = calculate_offset(orientation, :row, :forward)
-    col_offset = calculate_offset(orientation, :col, :forward)
+  def move_forward(%MarsRover{orientation: orientation} = mars_rover),
+    do:
+      update_position(
+        mars_rover,
+        calculate_offset(orientation, :row, :forward),
+        calculate_offset(orientation, :col, :forward)
+      )
 
-    {:ok, new_position} = Position.create(position.row + row_offset, position.col + col_offset)
-    {:ok, mars_rover} = create(name, new_position, orientation)
-    mars_rover
-  end
-
-  def move_backward(%MarsRover{name: name, position: position, orientation: orientation}) do
-    row_offset = calculate_offset(orientation, :row, :backward)
-    col_offset = calculate_offset(orientation, :col, :backward)
-
-    {:ok, new_position} = Position.create(position.row + row_offset, position.col + col_offset)
-    {:ok, mars_rover} = create(name, new_position, orientation)
-    mars_rover
-  end
+  def move_backward(%MarsRover{orientation: orientation} = mars_rover),
+    do:
+      update_position(
+        mars_rover,
+        calculate_offset(orientation, :row, :backward),
+        calculate_offset(orientation, :col, :backward)
+      )
 
   defp change_orientation(orientation, new_direction),
     do:
@@ -95,4 +93,17 @@ defmodule MarsRover.MarsRover do
         ),
         Atom.to_string(direction)
       )
+
+  defp update_position(
+         %MarsRover{name: name, position: position, orientation: orientation},
+         row_offset,
+         col_offset
+       ) do
+    {:ok, new_position} =
+      position
+      |> Position.update(row_offset, col_offset)
+
+    {:ok, mars_rover} = create(name, new_position, orientation)
+    mars_rover
+  end
 end
