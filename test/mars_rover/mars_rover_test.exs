@@ -51,8 +51,8 @@ defmodule MarsRover.MarsRoverTest do
       mars_rover
       |> MarsRover.move_forward()
 
-    assert mars_rover.position.row === 1
-    assert mars_rover.position.col === 2
+    assert mars_rover.position.row === 2
+    assert mars_rover.position.col === 1
   end
 
   test "move backward Mars Rover" do
@@ -63,7 +63,7 @@ defmodule MarsRover.MarsRoverTest do
       mars_rover
       |> MarsRover.move_backward()
 
-    assert mars_rover.position.row === 1
-    assert mars_rover.position.col === 1
+    assert mars_rover.position.row === 2
+    assert mars_rover.position.col === 0
   end
 end

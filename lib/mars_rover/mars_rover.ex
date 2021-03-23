@@ -18,20 +18,20 @@ defmodule MarsRover.MarsRover do
 
   @movement_map %{
     "north" => %{
-      "row" => %{"forward" => 0, "backward" => 0},
-      "col" => %{"forward" => 1, "backward" => -1}
-    },
-    "south" => %{
-      "row" => %{"forward" => 0, "backward" => 0},
-      "col" => %{"forward" => -1, "backward" => 1}
-    },
-    "east" => %{
       "row" => %{"forward" => 1, "backward" => -1},
       "col" => %{"forward" => 0, "backward" => 0}
     },
-    "west" => %{
+    "south" => %{
       "row" => %{"forward" => -1, "backward" => 1},
       "col" => %{"forward" => 0, "backward" => 0}
+    },
+    "east" => %{
+      "row" => %{"forward" => 0, "backward" => 0},
+      "col" => %{"forward" => 1, "backward" => -1}
+    },
+    "west" => %{
+      "row" => %{"forward" => 0, "backward" => 0},
+      "col" => %{"forward" => -1, "backward" => 1}
     }
   }
 
