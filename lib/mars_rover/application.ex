@@ -1,20 +1,26 @@
 defmodule MarsRover.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
 
   @impl true
   def start(_type, _args) do
-    children = [
-      # Starts a worker by calling: ElixirMarsRoverSupervisorKata.Worker.start_link(arg)
-      # {ElixirMarsRoverSupervisorKata.Worker, arg}
+    options = [
+      strategy: :one_for_one,
+      name: MarsRoverApplicaton.Supervisor
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: MarsRover.Supervisor]
-    Supervisor.start_link(children, opts)
+    DynamicSupervisor.start_link(options)
+  end
+
+  def init_rover(args) do
+    DynamicSupervisor.start_child(
+      MarsRoverApplicaton.Supervisor,
+      {MarsRover.MarsRoverWorker, args}
+    )
+  end
+
+  def terminate_rover(pid) do
+    DynamicSupervisor.terminate_child(MarsRoverApplicaton.Supervisor, pid)
   end
 end
