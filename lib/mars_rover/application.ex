@@ -5,22 +5,11 @@ defmodule MarsRover.Application do
 
   @impl true
   def start(_type, _args) do
-    options = [
-      strategy: :one_for_one,
-      name: MarsRoverApplicaton.Supervisor
+    children = [
+      MarsRover.MarsRoverSupervisor
     ]
 
-    DynamicSupervisor.start_link(options)
-  end
-
-  def init_rover(args) do
-    DynamicSupervisor.start_child(
-      MarsRoverApplicaton.Supervisor,
-      {MarsRover.MarsRoverWorker, args}
-    )
-  end
-
-  def terminate_rover(pid) do
-    DynamicSupervisor.terminate_child(MarsRoverApplicaton.Supervisor, pid)
+    opts = [strategy: :one_for_one, name: MarsRoverApplication.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
