@@ -1,6 +1,8 @@
 defmodule MarsRover.MarsRoverSupervisor do
   use DynamicSupervisor
 
+  alias MarsRover.MarsRoverWorker
+
   def start_link(arg),
     do: DynamicSupervisor.start_link(__MODULE__, arg, name: __MODULE__)
 
@@ -10,10 +12,16 @@ defmodule MarsRover.MarsRoverSupervisor do
   def init_mars_rover(args),
     do:
       DynamicSupervisor.start_child(
-        MarsRoverApplicaton.Supervisor,
+        __MODULE__,
         {MarsRover.MarsRoverWorker, args}
       )
 
-  def terminate_mars_rover(pid),
-    do: DynamicSupervisor.terminate_child(MarsRoverApplicaton.Supervisor, pid)
+  def terminate_mars_rover(name),
+    do: DynamicSupervisor.terminate_child(__MODULE__, pid_from_name(name))
+
+  defp pid_from_name(name) do
+    name
+    |> MarsRoverWorker.via_tuple()
+    |> GenServer.whereis()
+  end
 end

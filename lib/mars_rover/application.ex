@@ -6,6 +6,7 @@ defmodule MarsRover.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Registry, keys: :unique, name: MarsRoverRegistry},
       MarsRover.MarsRoverSupervisor
     ]
 

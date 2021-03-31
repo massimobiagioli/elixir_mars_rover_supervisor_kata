@@ -9,7 +9,7 @@ defmodule MarsRover.MarsRoverWorker do
   def start_link(args) do
     {:ok, position} = Position.create(args["row"], args["col"])
     {:ok, mars_rover} = MarsRover.create(args["name"], position, args["orientation"])
-    GenServer.start_link(__MODULE__, mars_rover, name: process_name(args))
+    GenServer.start_link(__MODULE__, mars_rover, name: via_tuple(args["name"]))
   end
 
   def init(args), do: {:ok, args}
@@ -68,5 +68,6 @@ defmodule MarsRover.MarsRoverWorker do
     {:reply, state.position, state}
   end
 
-  defp process_name(args), do: String.to_atom(args["name"])
+  def via_tuple(name),
+    do: {:via, Registry, {MarsRoverRegistry, name}}
 end
